@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 # Same Node release as the openGym API image.
-FROM node:22.23.4-alpine AS base
+FROM node:26.13.0-alpine AS base
 WORKDIR /app
 ENV NODE_ENV=production
 COPY package.json package-lock.json ./
