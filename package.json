@@ -16,9 +16,9 @@
     "test:contract": "node test/contract.ts"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "1.32.1",
-    "express": "5.2.1",
-    "express-rate-limit": "8.6.1",
+    "@modelcontextprotocol/sdk": "1.32.2",
+    "express": "5.3.0",
+    "express-rate-limit": "8.7.3",
     "node-fetch": "3.3.2",
     "ssrf-req-filter": "1.1.1",
     "zod": "4.6.7"
@@ -26,7 +26,7 @@
   "devDependencies": {
     "@playwright/test": "1.65.0",
     "@types/express": "5.0.6",
-    "@types/node": "22.20.5",
+    "@types/node": "26.6.6",
     "typescript": "7.0.2"
   }
 }
