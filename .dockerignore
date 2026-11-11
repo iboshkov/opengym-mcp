@@ -1,0 +1,20 @@
+.git
+.github
+node_modules
+.env
+.env.*
+!.env.example
+data
+runtime
+secrets
+docs
+deploy
+*.log
+test-results
+playwright-report
+test/browser
+compose*.yaml
+
+# Upstream's own unit tests are kept in the source tree but are not needed in the image.
+vendor/**/*.test.js
+vendor/**/*.test.jsx

@@ -1,0 +1,21 @@
+{
+  // Type checking only. Node runs the .ts files directly by stripping types,
+  // so the code sticks to erasable syntax (no enums or parameter properties).
+  "compilerOptions": {
+    "target": "ES2023",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "erasableSyntaxOnly": true,
+    "verbatimModuleSyntax": true,
+    "skipLibCheck": true,
+    "types": ["node"],
+    // The vendored openGym sources stay JavaScript; their types are inferred.
+    "allowJs": true,
+    "checkJs": false
+  },
+  "include": ["src", "test", "playwright.config.ts"],
+  "exclude": ["src/web/public"]
+}
