@@ -1,0 +1,38 @@
+# Adds the MCP service to openGym's own Compose project, as a third container
+# next to `api` and `web`. Copy this file beside openGym's docker-compose.yml and
+# start both together:
+#
+#   docker compose -f docker-compose.yml -f compose.opengym.yaml up -d
+#
+# The service talks to the API container directly over the project's private
+# network, so no workout data leaves the host. Add these to openGym's .env:
+#
+#   MCP_PUBLIC_ORIGIN=https://gym-mcp.example.com   # public HTTPS address of this service
+#   ORIGIN=https://gym.example.com                  # already set for openGym; reused for links
+#
+# Then route MCP_PUBLIC_ORIGIN to 127.0.0.1:8082 in your reverse proxy or tunnel.
+# See docs/DEPLOYMENT.md.
+services:
+  mcp:
+    image: ${OPENGYM_MCP_IMAGE:-opengym-mcp:local}
+    restart: unless-stopped
+    init: true
+    depends_on:
+      api:
+        condition: service_started
+    environment:
+      PUBLIC_ORIGIN: ${MCP_PUBLIC_ORIGIN:?Set MCP_PUBLIC_ORIGIN in .env, for example https://gym-mcp.example.com}
+      OPENGYM_URL: http://${BACKEND:-api}:${PORT:-3000}
+      OPENGYM_PUBLIC_URL: ${ORIGIN:-}
+      TRUST_PROXY_HOPS: ${MCP_TRUST_PROXY_HOPS:-1}
+      TZ: ${TZ:-UTC}
+    volumes:
+      - mcp-data:/data            # authorizations and their encryption key - BACK THIS UP
+    ports:
+      - '127.0.0.1:${MCP_PORT:-8082}:8082'
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+
+volumes:
+  mcp-data:

@@ -1,0 +1,11 @@
+node_modules/
+.env
+compose.override.yaml
+data/
+mcp-data/
+runtime/
+secrets/
+*.log
+coverage/
+test-results/
+playwright-report/

@@ -1,0 +1,32 @@
+# Standalone deployment: runs the MCP service next to an openGym instance that
+# is reachable over HTTPS. To run it inside openGym's own Compose project
+# instead, use deploy/compose.opengym.yaml. See docs/DEPLOYMENT.md.
+name: opengym-mcp
+
+services:
+  mcp:
+    image: ${OPENGYM_MCP_IMAGE:-opengym-mcp:local}
+    build: .
+    restart: unless-stopped
+    init: true
+    environment:
+      PUBLIC_ORIGIN: ${PUBLIC_ORIGIN:?Set PUBLIC_ORIGIN in .env, for example https://gym-mcp.example.com}
+      OPENGYM_URL: ${OPENGYM_URL:?Set OPENGYM_URL in .env, for example https://gym.example.com}
+      OPENGYM_PUBLIC_URL: ${OPENGYM_PUBLIC_URL:-}
+      TRUST_PROXY_HOPS: ${TRUST_PROXY_HOPS:-1}
+      TZ: ${TZ:-UTC}
+    volumes:
+      - mcp-data:/data            # authorizations and their encryption key - BACK THIS UP
+    ports:
+      - '127.0.0.1:${MCP_PORT:-8082}:8082'
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    mem_limit: 512m
+    pids_limit: 100
+    logging:
+      driver: json-file
+      options: { max-size: '5m', max-file: '2' }
+
+volumes:
+  mcp-data:
